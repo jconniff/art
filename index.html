@@ -4,12 +4,346 @@
 
 <head>
     <meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Jeff Conniff Art</title>
+    <script src="http://yui.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:200">
 </head>
+<style>
+html {
+    text-align: center;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #302D28;
+    color: #A59287;
+    background: url(images/_page_bkg.jpg);
+}
+body {
+    margin: 0;
+}
+.title {
+    display: inline-block;
+    font-weight: 100;
+    font-size: 190%;
+    margin: 0.3em 0;
+    letter-spacing: -0.05em;
+}
+.title span {
+    color: #7E6455;    
+}
+.title em {
+    margin: 0 0.15em;
+    color: #9B867A;
+    font-style: normal;
+}
+.envelope {
+    display: none;
+}
+#btn-contact {
+    display: inline-block;
+    padding: 0.5em 2em;
+    background-color: #2A2014;
+    cursor: pointer;
+    margin: 0 auto 2em;
+    /*width: 80%;
+    max-width: 523px;*/
+}
+.gallery {
+    margin: 0 auto;
+    width: 80%;
+    max-width: 523px;
+}
+.pics {
+    position: relative;
+    /*height: 430px;*/
+}
+.pic {
+    width: 100%;
+    border: 1px solid #34281D;
 
+    transition: opacity 0.5s;
+    opacity: 1;    
+}
+.a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /*height: 100%;*/
+}
+.pics .pic-hide {
+    opacity: 0;
+}
+.thumbs {
+    width: 100%;
+}
+.thumb {
+    height: 50px;
+    opacity: 0.5;
+    margin: 6px;
+}
+.thumbs .selected {
+    opacity: 1;
+    transition: opacity 0.5s;
+    box-shadow: 0 0 10px #C8C0AF;
+}
+/* these are notes divs that are right below each
+thumb when in small screens */
+.thumb-notes {
+    display: none;
+}
+.note {
+    margin: 10px 0;
+    text-align: left;
+    letter-spacing: 0.02em;
+}
+#overlay {
+    background-color: rgba(0,0,0,0.8);
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    transition: opacity 0.5s;
+    opacity: 0.9;
+}
+.yui3-widget-bd,
+.yui3-widget-ft {
+    padding: 0 1em 0.5em;
+}
+.email a {
+    display: block;
+    margin: 0.6em;
+    color: #fff;
+}
+
+.yui3-widget-hd {
+    text-align: right;
+    height: 0.6em;
+}
+
+.close {
+    display: inline-block;
+    padding: 0.5em;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+.yui3-overlay-loading {
+    display: none;
+}
+#overlay.faded {
+    opacity: 0;
+}
+
+/* 768px */
+@media screen and (max-width: 48em) {
+    /*
+    body {
+        border-left: 1px solid #f00;
+    }
+    */
+    .title-container {
+        position: fixed;        
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: url(images/_page_bkg.jpg);
+        box-shadow: 0 0 20px #000;
+    }
+    .title {
+        width: 90%;
+    }
+    .envelope {
+        display: inline;
+        margin-left: 0.7em;
+        vertical-align: baseline;
+        opacity: 0.7;
+    }
+
+    .pics {
+        display: none;
+    }
+    .thumbs {
+        margin-top: 4em;
+    }
+    .thumb {
+        width: 50%;
+        height: auto;
+        opacity: 1;
+    }
+    .thumb-notes {
+        display: block;
+        margin-bottom: 3em;
+    }
+    .thumbs .selected {
+        box-shadow: none;
+    }
+    .note {
+        display: none;
+    }
+}
+/* 568px */
+@media screen and (max-width: 35.5em) {
+    /*
+    body {
+        border-right: 5px solid #abc;
+    }
+    */
+    .thumb {
+        width: 90%;
+    }
+    .title {
+        font-size: 140%;
+    }
+}
+</style>
 <body>
-<h1>Jeff Conniff Art</h1>
-<script></script>
+<div class="gallery">
+
+<div class="title-container">
+    <h1 class="title">
+        Jeff&nbsp;Conniff&nbsp; 
+        <span>Works<em>&#183;</em>of<em>&#183;</em>Art</span>
+        <img class="envelope contact-trigger" src="images/_envelope.png">
+    </h1>
+</div>
+
+
+    <div class="pics">
+        <img class="b pic" src="images/_empty.jpg">
+        <img class="a pic">
+    </div>
+    <div class="note"></div>
+
+</div>
+<div class="thumbs"></div>
+    <div id="overlay" class="yui3-overlay-loading faded">
+    <div class="yui3-widget-hd"><div class="close">X</div></div>
+    <div class="yui3-widget-bd">
+        <div class="email"><a href="mailto:jeffconniff.art@gmail.com?Subject=Comment From Website" target="_top">jeffconniff.art@gmail.com</a></div>
+        for more information or<br>
+        to discuss potential commissions
+    </div>
+    <div class="yui3-widget-ft"></div>
+</div>
+
+<div id="btn-contact" class="contact-trigger">
+    Contact
+</div>
+
+
+<script>
+YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
+    var a = Y.one('.a'),
+        b = Y.one('.b'),
+        allThumbs,
+        domOverlay = Y.one('#overlay'),
+        timer,
+        picArr = [
+            {
+                src: 'ducqk.jpg',
+                note: 'Handcarved solid wood. Antique finish'
+            },
+            {
+                src: 'prop_scale.jpg',
+                note: '4 foot. Tempered hardboard, plaster'
+            },
+            {
+                src: 'horqse.jpg',
+                note: 'Wood, plaster, mache'
+            },
+            {
+                src: 'fisqh.jpg',
+                note: 'Wire and sheetmetal. Hanging mobile. 4 foot'
+            },
+            {
+                src: 'letqter_a.jpg',
+                note: 'Theme and variations in various media'
+            },
+            {
+                src: 'letqter_g.jpg',
+                note: 'Topic-related image clippings on tempered hardboard'
+            },
+            {
+                src: 'mooqse.jpg',
+                note: 'Paper Mache. No animals were harmed in the...'
+            },
+            {
+                src: 'danqce.jpg',
+                note: 'Dance movement frames. painted wire'
+            }
+        ],
+
+        selectTarget = function(node) {
+            var url = node.getAttribute('src');
+            a.setAttribute('src', url);
+            a.removeClass('pic-hide');
+            allThumbs.removeClass('selected');
+            node.addClass('selected');
+            timer = setTimeout(function(){
+                b.setAttribute('src', url);
+                a.addClass('pic-hide');
+            },500);
+            Y.one('.note').setHTML(picArr[allThumbs.indexOf(node)].note);
+        
+        },
+        
+        resizeWin = function() {
+            var winHeight = window.innerHeight
+                || document.documentElement.clientHeight
+                || document.body.clientHeight;
+    
+            if (winHeight > 595) {
+                Y.one('body').setStyle('marginTop', ((winHeight - 595) / 2) 
+                + 'px');
+            }
+        };
+        
+    // use delegate so that thumbs can be created on the fly
+    Y.one('.thumbs').delegate('click', function (e) {
+        selectTarget(e.target);
+    }, '.thumb');
+
+    
+    
+    
+
+    ///////////////// overlay for contact ///////////////////
+    // Create an overlay from markup
+    var overlay = new Y.Overlay({
+        srcNode:"#overlay",
+        width:"16em", //needs a width to be centered first time it shows
+        height:"8em",
+        centered: true
+    });
+
+
+    Y.one('body').delegate("click", function(e) {
+        overlay.render();
+        overlay.show();
+        setTimeout(function() {
+            domOverlay.removeClass('faded');
+        }, 100);
+
+        //Y.one('.yui3-overlay-loading').removeClass('yui3-overlay-loading');
+    }, ".contact-trigger");
+    
+    Y.on("click", function(e) {
+        overlay.hide();
+        domOverlay.addClass('faded');
+        
+    }, '.close');
+    /////////////// end overlay for contact //////////////////
+
+
+    /////////////// create/append thumbs //////////////////
+    for (var i = 0; i < picArr.length; i++) {
+        Y.one('.thumbs').append('<img class="thumb" src="images/' + picArr[i].src + '"><div class="thumb-notes">' + picArr[i].note + '</div>');        
+    }; 
+
+    allThumbs = Y.all('.thumb');
+    selectTarget(allThumbs.item(0));
+    
+    
+    Y.one(window).on('resize', resizeWin);    
+    resizeWin();
+});
+</script>
 </body>
 </html>
