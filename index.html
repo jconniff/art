@@ -43,8 +43,8 @@ body {
     padding: 0.5em 2em;
     background-color: #2A2014;
     cursor: pointer;
-    margin: 0 auto 2em;
-    /*width: 80%;
+    /*margin: 0 auto 2em;
+    width: 80%;
     max-width: 523px;*/
 }
 .gallery {
@@ -100,7 +100,6 @@ thumb when in small screens */
     background-color: rgba(0,0,0,0.8);
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
     transition: opacity 0.5s;
-    opacity: 0.9;
 }
 .yui3-widget-bd,
 .yui3-widget-ft {
@@ -130,7 +129,10 @@ thumb when in small screens */
 #overlay.faded {
     opacity: 0;
 }
-
+.legal-copyright {
+    font-size: 80%;
+    color: #6F5A4E;
+}
 /* 768px */
 @media screen and (max-width: 48em) {
     /*
@@ -226,7 +228,9 @@ thumb when in small screens */
 <div id="btn-contact" class="contact-trigger">
     Contact
 </div>
-
+<p class="legal-copyright">
+            &#169; 2015 Jeff Conniff. All rights reserved.
+        </p>
 
 <script>
 YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
@@ -238,35 +242,35 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         picArr = [
             {
                 src: 'ducqk.jpg',
-                note: 'Handcarved solid wood. Antique finish'
+                note: 'Handcarved solid wood, life size, antique finish.'
             },
             {
                 src: 'prop_scale.jpg',
-                note: '4 foot. Tempered hardboard, plaster'
+                note: 'Tempered hardboard, plaster. 4.5 ft.'
             },
             {
                 src: 'horqse.jpg',
-                note: 'Wood, plaster, mache'
+                note: 'Wood, plaster, paper mach&#233;. 3.5 ft.'
             },
             {
                 src: 'fisqh.jpg',
-                note: 'Wire and sheetmetal. Hanging mobile. 4 foot'
+                note: 'Wire and sheetmetal. Hanging mobile. 4 ft.'
             },
             {
                 src: 'letqter_a.jpg',
-                note: 'Theme and variations in various media'
+                note: 'Theme and variations in various media. 2.5 in. blocks'
             },
             {
                 src: 'letqter_g.jpg',
-                note: 'Topic-related image clippings on tempered hardboard'
+                note: 'Topic-related image clippings on tempered hardboard. 19 x 31 in.'
             },
             {
                 src: 'mooqse.jpg',
-                note: 'Paper Mache. No animals were harmed in the...'
+                note: 'Paper Mach&#233;. (No animals were harmed) 4 ft wide'
             },
             {
                 src: 'danqce.jpg',
-                note: 'Dance movement frames. painted wire'
+                note: 'Dance movement frames. painted wire. 3 ft.'
             }
         ],
 
@@ -289,8 +293,8 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
                 || document.documentElement.clientHeight
                 || document.body.clientHeight;
     
-            if (winHeight > 595) {
-                Y.one('body').setStyle('marginTop', ((winHeight - 595) / 2) 
+            if (winHeight > 620) {
+                Y.one('body').setStyle('marginTop', ((winHeight - 620) / 2) 
                 + 'px');
             }
         };
