@@ -130,8 +130,28 @@ thumb when in small screens */
 .contact-trigger {
     cursor: pointer;
 }
+#inp-email {
+    border: none;
+    background-color: transparent;
+    font: 20px "Raleway", arial;
+    color: #fff;
+    text-align: center;
+}
+#mailto {
+    display: none;
+    font: 20px "Raleway", arial;
+    color: #fff;
+}
+
+
 /* 768px */
 @media screen and (max-width: 48em) {
+    #mailto {
+        display: inline-block;
+    }
+    #inp-email {
+        display: none;
+    }
     .title-container {
         position: fixed;        
         top: 0;
@@ -184,17 +204,6 @@ thumb when in small screens */
     .title {
         font-size: 140%;
     }
-}
-#inp-email {
-    border: none;
-    background-color: transparent;
-    font: 20px "Raleway", arial;
-    color: #fff;
-    text-align: center;
-}
-#mailto {
-    font: 20px "Raleway", arial;
-    color: #fff;
 }
 </style>
 <body>
