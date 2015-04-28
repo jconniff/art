@@ -1,7 +1,5 @@
 <!DOCTYPE HTML>
-
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,9 +41,6 @@ body {
     padding: 0.5em 2em;
     background-color: #2A2014;
     cursor: pointer;
-    /*margin: 0 auto 2em;
-    width: 80%;
-    max-width: 523px;*/
 }
 .gallery {
     margin: 0 auto;
@@ -54,7 +49,6 @@ body {
 }
 .pics {
     position: relative;
-    /*height: 430px;*/
 }
 .pic {
     width: 100%;
@@ -68,7 +62,6 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    /*height: 100%;*/
 }
 .pics .pic-hide {
     opacity: 0;
@@ -105,17 +98,15 @@ thumb when in small screens */
 .yui3-widget-ft {
     padding: 0 1em 0.5em;
 }
-.email a {
+.email{
     display: block;
     margin: 0.6em;
     color: #fff;
 }
-
 .yui3-widget-hd {
     text-align: right;
     height: 0.6em;
 }
-
 .close {
     display: inline-block;
     padding: 0.5em;
@@ -136,13 +127,11 @@ thumb when in small screens */
 .link-card{
     display: none;
 }
+.contact-trigger {
+    cursor: pointer;
+}
 /* 768px */
 @media screen and (max-width: 48em) {
-    /*
-    body {
-        border-left: 1px solid #f00;
-    }
-    */
     .title-container {
         position: fixed;        
         top: 0;
@@ -160,7 +149,6 @@ thumb when in small screens */
         vertical-align: baseline;
         opacity: 0.7;
     }
-
     .pics {
         display: none;
     }
@@ -187,11 +175,6 @@ thumb when in small screens */
 }
 /* 568px */
 @media screen and (max-width: 35.5em) {
-    /*
-    body {
-        border-right: 5px solid #abc;
-    }
-    */
     .thumb {
         width: 90%;
     }
@@ -202,6 +185,17 @@ thumb when in small screens */
         font-size: 140%;
     }
 }
+#inp-email {
+    border: none;
+    background-color: transparent;
+    font: 20px "Raleway", arial;
+    color: #fff;
+    text-align: center;
+}
+#mailto {
+    font: 20px "Raleway", arial;
+    color: #fff;
+}
 </style>
 <body>
 <div class="gallery">
@@ -209,28 +203,27 @@ thumb when in small screens */
     <img class="link-img" src="images/link_img.jpg">
     Creating art in a huge variety of media and subject matter, on commission, to fit your unique environment. jeffconniff.art@gmail.com. . . . . . . . . . . .                   
 </div>
-
 <div class="title-container">
-    <h1 class="title">
+    <h1 class="title contact-trigger">
         Jeff&nbsp;Conniff&nbsp; 
         <span>Works<em>&#183;</em>of<em>&#183;</em>Art</span>
         <img class="envelope contact-trigger" src="images/envelope.png">
     </h1>
 </div>
-
-
     <div class="pics">
         <img class="b pic" src="images/empty.jpg">
         <img class="a pic">
     </div>
     <div class="note"></div>
-
 </div>
 <div class="thumbs"></div>
     <div id="overlay" class="yui3-overlay-loading faded">
     <div class="yui3-widget-hd"><div class="close">X</div></div>
     <div class="yui3-widget-bd">
-        <div class="email"><a href="mailto:jeffconniff.art@gmail.com?Subject=Comment From Website" target="_top">jeffconniff.art@gmail.com</a></div>
+        <div class="email">
+            <input id="inp-email" value="jconniff.art@gmail.com"/>
+            <a id="mailto" href="mailto:jeffconniff@gmail.com?subject=Comment%20From%20Works%20of%20Art%20Website" target="_top">jeffconniff@gmail.com</a>
+        </div>
         for more information or<br>
         to discuss potential commissions
     </div>
@@ -251,7 +244,12 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         allThumbs,
         domOverlay = Y.one('#overlay'),
         timer,
+        inpEmail = Y.one('#inp-email'),
         picArr = [
+            {
+                src: 'horqse.jpg',
+                note: 'Indoor, wall-mounted. Wood, plaster, paper mach&#233;. 3.5 ft.'
+            },
             {
                 src: 'ducqk.jpg',
                 note: 'Handcarved solid wood, life size, antique finish.'
@@ -261,8 +259,20 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
                 note: 'Tempered hardboard, plaster. 4.5 ft.'
             },
             {
-                src: 'horqse.jpg',
-                note: 'Indoor, wall-mounted. Wood, plaster, paper mach&#233;. 3.5 ft.'
+                src: 'moe.jpg',
+                note: '"Robotic Butterfly Enumerator". Salvaged parts sculpture. 15 x 24 in.'
+            },
+            {
+                src: 'iriqs.jpg',
+                note: 'Watercolor on gessoed masonite. 22 x 48 in.'
+            },
+            {
+                src: 'treqx.jpg',
+                note: 'T-rex fossil sculpture 40 x 17 in.'
+            },
+            {
+                src: 'cloqck.jpg',
+                note: 'Clock faces as art pieces. Classic to modern.'
             },
             {
                 src: 'fisqh.jpg',
@@ -282,7 +292,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
             },
             {
                 src: 'danqce.jpg',
-                note: 'Dance movement frames. painted wire. 3 ft.'
+                note: 'Dance movement frames. painted wire. Figures ~4 in. tall.'
             }
         ],
 
@@ -296,15 +306,16 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
                 b.setAttribute('src', url);
                 a.addClass('pic-hide');
             },500);
+            overlay.hide();
+            domOverlay.addClass('faded');
             Y.one('.note').setHTML(picArr[allThumbs.indexOf(node)].note);
-        
         },
         
         resizeWin = function() {
             var winHeight = window.innerHeight
                 || document.documentElement.clientHeight
                 || document.body.clientHeight;
-    
+                    
             if (winHeight > 620) {
                 Y.one('body').setStyle('marginTop', ((winHeight - 620) / 2) 
                 + 'px');
@@ -316,29 +327,33 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         selectTarget(e.target);
     }, '.thumb');
 
-    
-    
-    
-
     ///////////////// overlay for contact ///////////////////
     // Create an overlay from markup
     var overlay = new Y.Overlay({
         srcNode:"#overlay",
-        width:"16em", //needs a width to be centered first time it shows
+        width:"18em", //needs a width to be centered first time it shows
         height:"8em",
         centered: true
     });
 
-
-    Y.one('body').delegate("click", function(e) {
+    Y.one('body').delegate("click", function(e) {        
+        overlay.hide();
         overlay.render();
-        overlay.show();
+        overlay.show();        
         setTimeout(function() {
             domOverlay.removeClass('faded');
         }, 100);
-
+        setTimeout(function() {
+            inpEmail.focus();
+            inpEmail.select();
+        }, 800);
         //Y.one('.yui3-overlay-loading').removeClass('yui3-overlay-loading');
     }, ".contact-trigger");
+    
+    Y.on('click', function(e) {
+        inpEmail.focus();
+        inpEmail.select();
+    }, '#inp-email');
     
     Y.on("click", function(e) {
         overlay.hide();
@@ -347,7 +362,6 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
     }, '.close');
     /////////////// end overlay for contact //////////////////
 
-
     /////////////// create/append thumbs //////////////////
     for (var i = 0; i < picArr.length; i++) {
         Y.one('.thumbs').append('<img class="thumb" src="images/' + picArr[i].src + '"><div class="thumb-notes">' + picArr[i].note + '</div>');        
@@ -355,7 +369,6 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
 
     allThumbs = Y.all('.thumb');
     selectTarget(allThumbs.item(0));
-    
     
     Y.one(window).on('resize', resizeWin);    
     resizeWin();
