@@ -11,6 +11,7 @@
 html {
     text-align: center;
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
 }
 body {
     margin: 0;
@@ -20,7 +21,7 @@ body {
 }
 .title {
     display: inline-block;
-    font-weight: 100;
+
     font-size: 190%;
     margin: 0.3em 0;
     letter-spacing: -0.05em;
@@ -83,16 +84,28 @@ body {
 thumb when in small screens */
 .thumb-notes {
     display: none;
+    font-weight: 600;
 }
 .note {
     margin: 10px 0;
     text-align: left;
     letter-spacing: 0.02em;
+    font-weight: 600;
 }
 #overlay {
     background-color: rgba(0,0,0,0.8);
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
     transition: opacity 0.5s;
+}
+#opener {
+    background-color: rgba(0,0,0,0.8);
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    transition: opacity 0.5s;    
+}
+#opener .yui3-widget-bd {
+    padding: 1em;
+    line-height: 1.6;
+    font-weight: 600;
 }
 .yui3-widget-bd,
 .yui3-widget-ft {
@@ -117,7 +130,8 @@ thumb when in small screens */
 .yui3-overlay-loading {
     display: none;
 }
-#overlay.faded {
+#overlay.faded,
+#opener.faded {
     opacity: 0;
 }
 .legal-copyright {
@@ -142,9 +156,18 @@ thumb when in small screens */
     font: 20px "Raleway", arial;
     color: #fff;
 }
-
+.mobile-opener {
+    display: none;
+    margin-top: 4em
+}
 /* 768px */
 @media screen and (max-width: 48em) {
+    #opener {
+        display: none;
+    }
+    .mobile-opener {
+        display: block;
+    }
     #mailto {
         display: inline-block;
     }
@@ -172,7 +195,7 @@ thumb when in small screens */
         display: none;
     }
     .thumbs {
-        margin-top: 4em;
+        margin-top: 1em;
     }
     .thumb {
         width: 50%;
@@ -209,7 +232,7 @@ thumb when in small screens */
 <div class="gallery">
 <div class="link-card">
     <img class="link-img" src="images/link_img.jpg">
-    Creating art in a huge variety of media and subject matter, on commission, to fit your unique environment. jeffconniff.art@gmail.com. . . . . . . . . . . .                   
+    Creating art in a wide variety of media and subject matter, on commission, to fit your unique environment. jeffconniff.art@gmail.com. . . . . . . . . . . .                   
 </div>
 <div class="title-container">
     <h1 class="title contact-trigger">
@@ -217,6 +240,9 @@ thumb when in small screens */
         <span>Works<em>&#183;</em>of<em>&#183;</em>Art</span>
         <img class="envelope contact-trigger" src="images/envelope.png">
     </h1>
+</div>
+<div class="mobile-opener">
+    Creating art in a wide variety of media and subject matter, on commission, to fit your unique environment.    
 </div>
     <div class="pics">
         <img class="b pic" src="images/empty.jpg">
@@ -243,7 +269,12 @@ thumb when in small screens */
 </div>
 <p class="legal-copyright">
             &#169; 2015 Jeff Conniff. All rights reserved.
-        </p>
+</p>
+<div id="opener" class="yui3-overlay-loading faded">
+    <div class="yui3-widget-bd">
+    Creating art in a wide variety of media and subject matter, on commission, to fit your unique environment.
+    </div>
+</div>
 
 <script>
 YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
@@ -251,7 +282,11 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         b = Y.one('.b'),
         allThumbs,
         domOverlay = Y.one('#overlay'),
-        timer,
+        domOpener = Y.one('#opener'),
+        timerPic,
+        timerShow,
+        timerHide,
+        timerSelect,
         inpEmail = Y.one('#inp-email'),
         picArr = [
             {
@@ -306,11 +341,12 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
 
         selectTarget = function(node) {
             var url = node.getAttribute('src');
+            clearTimeout(timerPic);
             a.setAttribute('src', url);
             a.removeClass('pic-hide');
             allThumbs.removeClass('selected');
             node.addClass('selected');
-            timer = setTimeout(function(){
+            timerPic = setTimeout(function(){
                 b.setAttribute('src', url);
                 a.addClass('pic-hide');
             },500);
@@ -322,8 +358,13 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         resizeWin = function() {
             var winHeight = window.innerHeight
                 || document.documentElement.clientHeight
-                || document.body.clientHeight;
-                    
+                || document.body.clientHeight,
+                winWidth = window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth;
+            if (winWidth > (16 * 48)) { // wider than 48em media query
+                window.scrollTo(0, 0);                                                                        
+            }        
             if (winHeight > 620) {
                 Y.one('body').setStyle('marginTop', ((winHeight - 620) / 2) 
                 + 'px');
@@ -355,6 +396,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
             inpEmail.focus();
             inpEmail.select();
         }, 800);
+        opener.hide();
         //Y.one('.yui3-overlay-loading').removeClass('yui3-overlay-loading');
     }, ".contact-trigger");
     
@@ -366,9 +408,38 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
     Y.on("click", function(e) {
         overlay.hide();
         domOverlay.addClass('faded');
-        
     }, '.close');
     /////////////// end overlay for contact //////////////////
+
+    ////////////// create overlay for opener /////////////////
+    var opener = new Y.Overlay({
+        srcNode:"#opener",
+        width:"18em", //needs a width to be centered first time it shows
+        height:"8em",
+        centered: true
+    });
+    opener.render();
+    domOpener.removeClass('faded');
+    timerShow = setTimeout(function() {
+        domOpener.addClass('faded');
+    }, 5000);
+    timerHide = setTimeout(function() {
+        opener.hide();
+    }, 6000);
+    Y.on('mouseover', function() {
+        clearTimeout(timerHide);
+        opener.show();
+        domOpener.removeClass('faded'); // fade in
+    }, '.title');
+    Y.on('mouseout', function() {
+        clearTimeout(timerHide);
+        domOpener.addClass('faded');  //let it fade out before .hide()
+        timerHide = setTimeout(function() {
+            opener.hide();
+        }, 1000);
+    }, '.title');
+    
+    ////////////// end overlay for opener /////////////////
 
     /////////////// create/append thumbs //////////////////
     for (var i = 0; i < picArr.length; i++) {
