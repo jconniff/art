@@ -157,16 +157,22 @@ thumb when in small screens */
     font: 20px "Raleway", arial;
     color: #fff;
 }
-.mobile-opener {
+.mobile-opener, .mobile-opener-bottom {
     display: none;
-    margin-top: 4em
+    margin-top: 4em;
+}
+.mobile-opener-bottom {
+    margin: 2em auto 1em;
+    border-top: solid 1px #3F3223;
+    padding-top: 0.3em;
+    width: 90%;
 }
 /* 768px */
 @media screen and (max-width: 48em) {
     #opener {
         display: none;
     }
-    .mobile-opener {
+    .mobile-opener, .mobile-opener-bottom {
         display: block;
     }
     #mailto {
@@ -191,6 +197,7 @@ thumb when in small screens */
         margin-left: 0.3em;
         vertical-align: baseline;
         opacity: 0.7;
+        width: 25px;
     }
     .pics {
         display: none;
@@ -268,6 +275,9 @@ thumb when in small screens */
     <div class="yui3-widget-ft"></div>
 </div>
 
+<div class="mobile-opener-bottom">
+    Creating art in a wide variety of media and subject matter, on commission, to fit your unique environment.    
+</div>
 <div id="btn-contact" class="contact-trigger">
     Contact
 </div>
@@ -276,7 +286,7 @@ thumb when in small screens */
 </p>
 <div id="opener" class="yui3-overlay-loading faded">
     <div class="yui3-widget-bd">
-    Creating art in a wide variety of media and subject matter, on commission, to fit your unique environment.
+    Creating custom art in a wide variety of media and subject matter, on commission, to fit your unique environment.
     </div>
 </div>
 
@@ -343,6 +353,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
             }
         ],
 
+        // clicking on a thumbnail displays it's image in the main .pics image
         selectTarget = function(node) {
             var url = node.getAttribute('src');
             clearTimeout(timerPic);
@@ -378,6 +389,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
     // use delegate so that thumbs can be created on the fly
     Y.one('.thumbs').delegate('click', function (e) {
         selectTarget(e.target);
+        opener.hide();
     }, '.thumb');
 
     ///////////////// overlay for contact ///////////////////
@@ -415,7 +427,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
     }, '.close');
     /////////////// end overlay for contact //////////////////
 
-    ////////////// create overlay for opener /////////////////
+    ////////////// create overlay for opener text /////////////////
     var opener = new Y.Overlay({
         srcNode:"#opener",
         width:"18em", //needs a width to be centered first time it shows
@@ -425,11 +437,16 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
     opener.render();
     domOpener.removeClass('faded');
     timerShow = setTimeout(function() {
-        domOpener.addClass('faded');
-    }, 5000);
+        Y.on('mouseover', function() {
+            domOpener.addClass('faded');
+            timerHide = setTimeout(function() {
+                opener.hide();
+            }, 500);
+        },"#opener");
+    }, 8000);
     timerHide = setTimeout(function() {
         opener.hide();
-    }, 6000);
+    }, 15000);
     Y.on('mouseover', function() {
         clearTimeout(timerHide);
         opener.show();
