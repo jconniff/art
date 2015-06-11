@@ -167,6 +167,32 @@ thumb when in small screens */
     padding-top: 0.3em;
     width: 90%;
 }
+.arrow-left,
+.arrow-right {
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    height: 100px;
+    width: 50px;
+    background: url(images/arrows.png) no-repeat;
+    background-color: rgba(100, 75, 50, 0.2);
+    cursor: pointer;
+}
+.arrow-left {
+    left: -50px;
+    border-radius: 50px 0 0 50px;
+    background-position: 13px 24px;
+}
+.arrow-right {
+    right: -51px;
+    border-radius: 0 50px 50px 0;
+    background-position: -50px 24px;
+}
+.arrow-disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
 /* 768px */
 @media screen and (max-width: 48em) {
     #opener {
@@ -256,6 +282,8 @@ thumb when in small screens */
     Creating custom art in a wide variety of media and subject matter, on commission, to fit your unique environment.    
 </div>
     <div class="pics">
+        <div class="arrow arrow-left arrow-disabled"></div>
+        <div class="arrow arrow-right"></div>
         <img class="b pic" src="images/empty.jpg">
         <img class="a pic">
     </div>
@@ -295,6 +323,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
     var a = Y.one('.a'),
         b = Y.one('.b'),
         allThumbs,
+        currThumb = 0,
         domOverlay = Y.one('#overlay'),
         domOpener = Y.one('#opener'),
         timerPic,
@@ -356,6 +385,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         // clicking on a thumbnail displays it's image in the main .pics image
         selectTarget = function(node) {
             var url = node.getAttribute('src');
+            currentThumb = allThumbs.indexOf(node);
             clearTimeout(timerPic);
             a.setAttribute('src', url);
             a.removeClass('pic-hide');
@@ -368,6 +398,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
             overlay.hide();
             domOverlay.addClass('faded');
             Y.one('.note').setHTML(picArr[allThumbs.indexOf(node)].note);
+            setNavArrowState();
         },
         
         resizeWin = function() {
@@ -384,6 +415,22 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
                 Y.one('body').setStyle('marginTop', ((winHeight - 620) / 2) 
                 + 'px');
             }
+        },
+        
+        setNavArrowState = function() {
+            var arrowL = Y.one('.arrow-left'),
+                arrowR = Y.one('.arrow-right');
+                
+            if (currentThumb === 0) {
+                arrowL.addClass('arrow-disabled');
+            } else {
+                arrowL.removeClass('arrow-disabled');
+            }
+            if (currentThumb === picArr.length - 1) {
+                arrowR.addClass('arrow-disabled');
+            } else {
+                arrowR.removeClass('arrow-disabled');
+            }
         };
         
     // use delegate so that thumbs can be created on the fly
@@ -392,6 +439,26 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         opener.hide();
     }, '.thumb');
 
+    // click an arrow to navigate
+    Y.all('.arrow').on('click', function (e){
+        opener.hide();
+        if (e.target.hasClass('arrow-left')) {
+            if (currentThumb > 0) {
+                currentThumb = currentThumb - 1;
+                selectTarget(allThumbs.item(currentThumb));
+            }
+            if (currentThumb === 0) {
+                e.target
+            }
+        } else {
+            if (currentThumb < picArr.length - 1) {
+                currentThumb = (currentThumb + 1);
+                selectTarget(allThumbs.item(currentThumb));
+            }
+        }
+        setNavArrowState();
+    });
+    
     ///////////////// overlay for contact ///////////////////
     // Create an overlay from markup
     var overlay = new Y.Overlay({
