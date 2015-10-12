@@ -290,7 +290,7 @@ thumb when in small screens */
     <div class="note"></div>
 </div>
 <div class="thumbs"></div>
-    <div id="overlay" class="yui3-overlay-loading faded">
+<div id="overlay" class="yui3-overlay-loading faded">
     <div class="yui3-widget-hd"><div class="close">X</div></div>
     <div class="yui3-widget-bd">
         <div class="email">
@@ -319,7 +319,7 @@ thumb when in small screens */
 </div>
 
 <script>
-YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
+YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
     var a = Y.one('.a'),
         b = Y.one('.b'),
         allThumbs,
@@ -488,7 +488,12 @@ YUI().use('node', 'overlay', 'node-event-delegate', function (Y) {
         inpEmail.select();
     }, '#inp-email');
     
-    Y.on("click", function(e) {
+//    Y.on("click", function(e) {
+//        overlay.hide();
+//        domOverlay.addClass('faded');
+//    }, '.close');
+    
+    Y.on("tap", function (e) {
         overlay.hide();
         domOverlay.addClass('faded');
     }, '.close');
