@@ -127,7 +127,7 @@ thumb when in small screens */
     top: 0;
     right: 0;
     cursor: pointer;
-    background-color: #000;
+    background-color: rgba(0,0,0,0.01);
 }
 .yui3-overlay-loading {
     display: none;
@@ -469,7 +469,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
         centered: true
     });
 
-    Y.one('body').delegate("click", function(e) {        
+    Y.one('body').delegate("tap", function(e) {        
         overlay.hide();
         overlay.render();
         overlay.show();        
@@ -488,12 +488,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
         inpEmail.focus();
         inpEmail.select();
     }, '#inp-email');
-    
-//    Y.on("click", function(e) {
-//        overlay.hide();
-//        domOverlay.addClass('faded');
-//    }, '.close');
-    
+        
     Y.on("tap", function (e) {
         overlay.hide();
         domOverlay.addClass('faded');
