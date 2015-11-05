@@ -493,6 +493,9 @@ YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
         overlay.hide();
         domOverlay.addClass('faded');
     }, '.close');
+    Y.on('click', function(e) {
+        return false;
+    }, '#mailto');
     /////////////// end overlay for contact //////////////////
 
     ////////////// create overlay for opener text /////////////////
