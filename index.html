@@ -296,7 +296,8 @@ thumb when in small screens */
     <div class="yui3-widget-bd">
         <div class="email">
             <input id="inp-email" value="jeffconniff.art@gmail.com"/>
-//            <a id="mailto" href="mailto://jeffconniff.art@gmail.com?subject=Comment%20From%20Custom%20Art%20Website" target="_blank">jeffconniff.art@gmail.com</a>
+<!--            <a id="mailto" href="mailto://jeffconniff.art@gmail.com?subject=Comment%20From%20Custom%20Art%20Website" target="_blank">jeffconniff.art@gmail.com</a>
+-->
             <a href="mailto:jeffconniff.art@gmail.com?Subject=Website%20Comment" target="_top">jeffconniff.art@gmail.com</a>
         </div>
         for more information or<br>
@@ -494,9 +495,9 @@ YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
         overlay.hide();
         domOverlay.addClass('faded');
     }, '.close');
-    Y.on('click', function(e) {
-        return false;
-    }, '#mailto');
+//    Y.on('click', function(e) {
+//        return false;
+//    }, '#mailto');
     /////////////// end overlay for contact //////////////////
 
     ////////////// create overlay for opener text /////////////////
