@@ -1,0 +1,552 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Jeff Conniff Custom Art</title>
+    <script src="http://yui.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:200">
+</head>
+<style>
+html {
+    text-align: center;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+}
+body {
+    margin: 0;
+    background-color: #302D28;
+    background: url(images/page_bkg.jpg);
+    color: #A59287;
+}
+.title {
+    display: inline-block;
+    color: #A59287;
+    font-size: 190%;
+    margin: 0.3em 0;
+    letter-spacing: -0.05em;
+}
+.title span {
+    color: #7E6455;
+    margin-left: 0.7em;    
+}
+.title em {
+    margin: 0 0.15em;
+    color: #9B867A;
+    font-style: normal;
+}
+.envelope {
+    display: none;
+}
+#btn-contact {
+    display: inline-block;
+    padding: 0.5em 2em;
+    background-color: #2A2014;
+    cursor: pointer;
+    color: #A59287;
+}
+.gallery {
+    margin: 0 auto;
+    width: 80%;
+    max-width: 523px;
+}
+.pics {
+    position: relative;
+}
+.pic {
+    width: 100%;
+    border: 1px solid #34281D;
+
+    transition: opacity 0.5s;
+    opacity: 1;    
+}
+.a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.pics .pic-hide {
+    opacity: 0;
+}
+.thumbs {
+    width: 100%;
+}
+.thumb {
+    height: 50px;
+    opacity: 0.5;
+    margin: 6px;
+}
+.thumbs .selected {
+    opacity: 1;
+    transition: opacity 0.5s;
+    box-shadow: 0 0 10px #C8C0AF;
+}
+/* these are notes divs that are right below each
+thumb when in small screens */
+.thumb-notes {
+    display: none;
+    font-weight: 600;
+}
+.note {
+    margin: 10px 0;
+    text-align: left;
+    letter-spacing: 0.02em;
+    font-weight: 600;
+}
+#overlay {
+    background-color: rgba(0,0,0,0.8);
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    transition: opacity 0.5s;
+}
+#opener {
+    background-color: rgba(0,0,0,0.8);
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    transition: opacity 0.5s;    
+}
+#opener .yui3-widget-bd {
+    padding: 1em;
+    line-height: 1.6;
+    font-weight: 600;
+}
+#overlay .yui3-widget-hd {
+    height: 20px;    
+}
+#overlay .yui3-widget-bd {
+    /* background-color: #234; */
+}
+.yui3-widget-bd,
+.yui3-widget-ft {
+    padding: 0 1em 0.5em;
+}
+.email{
+    display: block;
+    margin: 0.6em;
+    color: #fff;
+}
+.yui3-widget-hd {
+    text-align: right;
+    height: 0.6em;
+}
+.close {
+    display: inline-block;
+    padding: 0.5em;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.01);
+}
+.yui3-overlay-loading {
+    display: none;
+}
+#overlay.faded,
+#opener.faded {
+    opacity: 0;
+}
+.legal-copyright {
+    font-size: 80%;
+    color: #6F5A4E;
+}
+.link-card{
+    display: none;
+}
+.contact-trigger {
+    cursor: pointer;
+}
+#inp-email {
+    border: none;
+    background-color: transparent;
+    font: 20px "Raleway", arial;
+    color: #fff;
+    text-align: center;
+}
+.mobile-opener, .mobile-opener-bottom {
+    display: none;
+    margin-top: 4em;
+}
+.mobile-opener-bottom {
+    margin: 2em auto 1em;
+    border-top: solid 1px #3F3223;
+    padding-top: 0.3em;
+    width: 90%;
+}
+.arrow-left,
+.arrow-right {
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    height: 100px;
+    width: 50px;
+    background: url(images/arrows.png) no-repeat;
+    background-color: rgba(100, 75, 50, 0.2);
+    cursor: pointer;
+}
+.arrow-left {
+    left: -50px;
+    border-radius: 50px 0 0 50px;
+    background-position: 13px 24px;
+}
+.arrow-right {
+    right: -51px;
+    border-radius: 0 50px 50px 0;
+    background-position: -50px 24px;
+}
+.arrow-disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* 768px */
+@media screen and (max-width: 48em) {
+    #overlay {
+        display: none;
+    }
+    #opener {
+        display: none;
+    }
+    .mobile-opener, .mobile-opener-bottom {
+        display: block;
+    }
+    #inp-email {
+        display: none;
+    }
+    .title-container {
+        position: fixed;        
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: url(images/page_bkg.jpg);
+        box-shadow: 0 0 20px #000;
+    }
+    .title {
+        width: 90%;
+    }
+    .envelope {
+        display: inline;
+        margin-left: 0.3em;
+        vertical-align: baseline;
+        opacity: 0.7;
+        width: 25px;
+    }
+    .pics {
+        display: none;
+    }
+    .thumbs {
+        margin-top: 1em;
+    }
+    .thumb {
+        width: 50%;
+        height: auto;
+        opacity: 1;
+    }
+    .thumb-notes {
+        display: block;
+        margin: 0 auto 2em;
+        text-align: left;
+        width: 50%;
+    }
+    .thumbs .selected {
+        box-shadow: none;
+    }
+    .note {
+        display: none;
+    }
+}
+/* 568px */
+@media screen and (max-width: 35.5em) {
+    .thumb {
+        width: 90%;
+    }
+    .thumb-notes {
+        width: 90%;
+    }
+    .title {
+        font-size: 140%;
+    }
+    .title span {
+        margin-left: 0;
+    }
+}
+</style>
+<body>
+<div class="gallery">
+<div class="link-card">
+    <img class="link-img" src="images/link_img.jpg">
+    Creating custom art in a wide variety of media and subject matter, on commission, to fit your unique environment. jeffconniff.art@gmail.com. . . . . . . . . . . .                   
+</div>
+<div class="title-container">
+    <a href="mailto:jeffconniff.art@gmail.com?Subject=Message%20from%20Custom%20Art%20Website%20" target="_top">
+        <h1 class="title">
+            Jeff Conniff 
+            <span>Custom Art</span>
+            <img class="envelope" src="images/envelope.png">
+        </h1>
+    </a>
+</div>
+<div class="mobile-opener">
+    Creating custom art in a wide variety of media and subject matter, on commission, to fit your unique environment.    
+</div>
+    <div class="pics">
+        <div class="arrow arrow-left arrow-disabled"></div>
+        <div class="arrow arrow-right"></div>
+        <img class="b pic" src="images/empty.jpg">
+        <img class="a pic">
+    </div>
+    <div class="note"></div>
+</div>
+<div class="thumbs"></div>
+<div id="overlay" class="yui3-overlay-loading "><!--faded -->
+    <div class="yui3-widget-hd"><div class="close">X</div></div>
+    <div class="yui3-widget-bd">
+        <div class="email">
+            <input id="inp-email" value="jeffconniff.art@gmail.com"/>
+        </div>
+        for more information or<br>
+        to discuss potential commissions
+    </div>
+    <div class="yui3-widget-ft"></div>
+</div>
+
+<div class="mobile-opener-bottom">
+    Creating custom art in a wide variety of media and subject matter, on commission, to fit your unique environment.    
+</div>
+<a href="mailto:jeffconniff.art@gmail.com?Subject=Message%20from%20Custom%20Art%20Website%20" target="_top">
+    <div id="btn-contact" class="contact-trigger">
+        Contact
+    </div>
+</a>
+<p class="legal-copyright">
+            &#169; 2015 Jeff Conniff. All rights reserved.
+</p>
+<div id="opener" class="yui3-overlay-loading faded">
+    <div class="yui3-widget-bd">
+    Creating custom art in a wide variety of media and subject matter, on commission, to fit your unique environment.
+    </div>
+</div>
+<script>
+YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
+    var a = Y.one('.a'),
+        b = Y.one('.b'),
+        allThumbs,
+        currThumb = 0,
+        domOverlay = Y.one('#overlay'),
+        domOpener = Y.one('#opener'),
+        timerPic,
+        timerShow,
+        timerHide,
+        timerSelect,
+        inpEmail = Y.one('#inp-email'),
+        picArr = [
+            {
+                src: 'horqse.jpg',
+                note: 'Indoor, wall-mounted. Wood, plaster, paper mache. 3.5 ft.'
+            },
+            {
+                src: 'ducqk.jpg',
+                note: 'Hand carved solid wood, life size, antique finish.'
+            },
+            {
+                src: 'prop_scale.jpg',
+                note: 'Tempered hardboard, plaster. 4.5 ft.'
+            },
+            {
+                src: 'moe.jpg',
+                note: '"Robotic Butterfly Enumerator". Salvaged parts sculpture. 15 x 24 in.'
+            },
+            {
+                src: 'iriqs.jpg',
+                note: 'Watercolor on gessoed Masonite. 22 x 48 in.'
+            },
+            {
+                src: 'treqx.jpg',
+                note: 'T-rex fossil sculpture. 40 x 17 in.'
+            },
+            {
+                src: 'cloqck.jpg',
+                note: 'Clock faces as art pieces. Classic to modern.'
+            },
+            {
+                src: 'fisqh.jpg',
+                note: 'Wire and sheet metal. Hanging mobile. 4 ft.'
+            },
+            {
+                src: 'letqter_a.jpg',
+                note: 'Theme and variations in various media. 2.5 in. blocks'
+            },
+            {
+                src: 'letqter_g.jpg',
+                note: 'Topic-related image clippings on tempered hardboard. 19 x 31 in.'
+            },
+            {
+                src: 'mooqse.jpg',
+                note: 'Paper Mache. (No animals were harmed). 4 ft. wide'
+            },
+            {
+                src: 'danqce.jpg',
+                note: 'Dance movement frames. Painted wire. Figures ~4 in. tall.'
+            }
+        ],
+
+        // clicking on a thumbnail displays it's image in the main .pics image
+        selectTarget = function(node) {
+            var url = node.getAttribute('src');
+            currentThumb = allThumbs.indexOf(node);
+            clearTimeout(timerPic);
+            a.setAttribute('src', url);
+            a.removeClass('pic-hide');
+            allThumbs.removeClass('selected');
+            node.addClass('selected');
+            timerPic = setTimeout(function(){
+                b.setAttribute('src', url);
+                a.addClass('pic-hide');
+            },500);
+            overlay.hide();
+            domOverlay.addClass('faded');
+            Y.one('.note').setHTML(picArr[allThumbs.indexOf(node)].note);
+            setNavArrowState();
+        },
+        
+        resizeWin = function() {
+            var winHeight = window.innerHeight
+                || document.documentElement.clientHeight
+                || document.body.clientHeight,
+                winWidth = window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth;
+            if (winWidth > (16 * 48)) { // wider than 48em media query
+                window.scrollTo(0, 0);                                                                        
+            }        
+            if (winHeight > 620) {
+                Y.one('body').setStyle('marginTop', ((winHeight - 620) / 2) 
+                + 'px');
+            }
+        },
+        
+        setNavArrowState = function() {
+            var arrowL = Y.one('.arrow-left'),
+                arrowR = Y.one('.arrow-right');
+                
+            if (currentThumb === 0) {
+                arrowL.addClass('arrow-disabled');
+            } else {
+                arrowL.removeClass('arrow-disabled');
+            }
+            if (currentThumb === picArr.length - 1) {
+                arrowR.addClass('arrow-disabled');
+            } else {
+                arrowR.removeClass('arrow-disabled');
+            }
+        };
+        
+    // use delegate so that thumbs can be created on the fly
+    Y.one('.thumbs').delegate('click', function (e) {
+        selectTarget(e.target);
+        opener.hide();
+    }, '.thumb');
+
+    // click an arrow to navigate
+    Y.all('.arrow').on('click', function (e){
+        opener.hide();
+        if (e.target.hasClass('arrow-left')) {
+            if (currentThumb > 0) {
+                currentThumb = currentThumb - 1;
+                selectTarget(allThumbs.item(currentThumb));
+            }
+            if (currentThumb === 0) {
+                e.target
+            }
+        } else {
+            if (currentThumb < picArr.length - 1) {
+                currentThumb = (currentThumb + 1);
+                selectTarget(allThumbs.item(currentThumb));
+            }
+        }
+        setNavArrowState();
+    });
+    
+    ///////////////// overlay for contact ///////////////////
+    // Create an overlay from markup
+    var overlay = new Y.Overlay({
+        srcNode:"#overlay",
+        width:"18em", //needs a width to be centered first time it shows
+ //       height:"8em", // when overall height is set hd, bd, and ft are tiny.
+                        // this makes content not tappable in mobile.
+        centered: true
+    });
+
+    Y.one('body').delegate("tap", function(e) {        
+        overlay.hide();
+        overlay.render();
+        overlay.show();        
+        setTimeout(function() {
+            domOverlay.removeClass('faded');
+        }, 100);
+        setTimeout(function() {
+            inpEmail.focus();
+            inpEmail.select();
+        }, 800);
+        opener.hide();
+        //Y.one('.yui3-overlay-loading').removeClass('yui3-overlay-loading');
+    }, ".contact-trigger");
+    
+    Y.on('click', function(e) {
+        inpEmail.focus();
+        inpEmail.select();
+    }, '#inp-email');
+        
+    Y.on("tap", function (e) {
+        overlay.hide();
+        domOverlay.addClass('faded');
+    }, '.close');
+    
+    /////////////// end overlay for contact //////////////////
+
+    ////////////// create overlay for opener text /////////////////
+    var opener = new Y.Overlay({
+        srcNode:"#opener",
+        width:"18em", //needs a width to be centered first time it shows
+        height:"8em",
+        centered: true
+    });
+    opener.render();
+    domOpener.removeClass('faded');
+    timerShow = setTimeout(function() {
+        Y.on('mouseover', function() {
+            domOpener.addClass('faded');
+            timerHide = setTimeout(function() {
+                opener.hide();
+            }, 500);
+        },"#opener");
+    }, 8000);
+    timerHide = setTimeout(function() {
+        opener.hide();
+    }, 15000);
+    Y.on('mouseover', function() {
+        clearTimeout(timerHide);
+        opener.show();
+        domOpener.removeClass('faded'); // fade in
+    }, '.title');
+    Y.on('mouseout', function() {
+        clearTimeout(timerHide);
+        domOpener.addClass('faded');  //let it fade out before .hide()
+        timerHide = setTimeout(function() {
+            opener.hide();
+        }, 1000);
+    }, '.title');
+    
+    ////////////// end overlay for opener /////////////////
+
+    /////////////// create/append thumbs //////////////////
+    for (var i = 0; i < picArr.length; i++) {
+        Y.one('.thumbs').append('<img class="thumb" src="images/' + picArr[i].src + '"><div class="thumb-notes">' + picArr[i].note + '</div>');        
+    }; 
+
+    allThumbs = Y.all('.thumb');
+    selectTarget(allThumbs.item(0));
+    
+    Y.one(window).on('resize', resizeWin);    
+    resizeWin();
+});
+</script>
+</body>
+</html>
