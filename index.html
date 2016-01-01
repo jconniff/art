@@ -6,6 +6,7 @@
 	<title>Jeff Conniff Custom Art</title>
     <script src="https://yui-s.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:200">
+    <link rel="icon" type="image/png" href="images/favicon-32.png">
 </head>
 <style>
 html {
@@ -47,7 +48,7 @@ body {
 .gallery {
     margin: 0 auto;
     width: 80%;
-    max-width: 523px;
+    max-width: 525px;  /* pic images are 523px plus a 1px border */
 }
 .pics {
     position: relative;
@@ -70,11 +71,18 @@ body {
 }
 .thumbs {
     width: 100%;
+    overflow: hidden;
 }
-.thumb {
+/* container of thumb, and in mobile tape */
+.thumb-shell {
+    position: relative;
     height: 50px;
     opacity: 0.5;
     margin: 6px;
+    display: inline-block;
+}
+.thumb {
+    height: 100%;
 }
 .thumbs .selected {
     opacity: 1;
@@ -84,11 +92,12 @@ body {
 /* these are notes divs that are right below each
 thumb when in small screens */
 .thumb-notes {
+    position: relative;
     display: none;
     font-weight: 600;
 }
 .note {
-    margin: 10px 0;
+    margin: 10px 39px 10px 0;
     text-align: left;
     letter-spacing: 0.02em;
     font-weight: 600;
@@ -194,9 +203,48 @@ thumb when in small screens */
     opacity: 0.4;
     cursor: default;
 }
-
+.btn-tape {
+    position: absolute;
+    bottom: -33px;
+    right: 0px;
+    width: 37px;
+    opacity: 0.6;
+}
+.tape {
+    position: absolute;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s; /* For Safari 3.1 to 6.0 */
+    transition: opacity 0.3s;
+}
+.tape-show {
+    opacity: 0.8;
+    -webkit-transition: opacity 0.3s; /* For Safari 3.1 to 6.0 */
+    transition: opacity 0.3s;
+}
+.thumbs .tape {
+    display: none;
+}
+.tape-ul {
+    top: 1em;
+    left: 1em;
+}
+.tape-ur {
+    top: 1em;
+    right: 1em;
+}
+.tape-ll {
+    bottom: 1em;
+    left: 1em;
+}
+.tape-lr {
+    bottom: 1em;
+    right: 1em;
+}
 /* 768px */
 @media screen and (max-width: 48em) {
+    .thumbs .tape {
+        display: block;
+    }
     #overlay {
         display: none;
     }
@@ -216,6 +264,7 @@ thumb when in small screens */
         width: 100%;
         background: url(images/page_bkg.jpg);
         box-shadow: 0 0 20px #000;
+        z-index: 1;
     }
     .title {
         width: 90%;
@@ -234,15 +283,27 @@ thumb when in small screens */
         margin-top: 1em;
     }
     .thumb {
-        width: 50%;
+        width: 100%;
+    }
+    .thumb-shell {
+        width: 90%;
         height: auto;
         opacity: 1;
     }
     .thumb-notes {
         display: block;
-        margin: 0 auto 2em;
+        margin: 0 10% 2em 5%;
         text-align: left;
-        width: 50%;
+        width: 80%;
+    }
+    .thumb-notes .btn-tape {
+        position: absolute;
+        display: inline-block;
+        vertical-align: top;
+        width: 2em;
+        bottom: 0px;
+        top: 0;
+        right: -2em;
     }
     .thumbs .selected {
         box-shadow: none;
@@ -253,10 +314,7 @@ thumb when in small screens */
 }
 /* 568px */
 @media screen and (max-width: 35.5em) {
-    .thumb {
-        width: 90%;
-    }
-    .thumb-notes {
+    .thumb-shell {
         width: 90%;
     }
     .title {
@@ -290,6 +348,8 @@ thumb when in small screens */
         <div class="arrow arrow-right"></div>
         <img class="b pic" src="images/empty.jpg">
         <img class="a pic">
+        <img class="tape" src="images/tape.png">
+        <img class="btn-tape" src="images/tape_body.png" title="Click to Show scale">
     </div>
     <div class="note"></div>
 </div>
@@ -324,10 +384,11 @@ thumb when in small screens */
 </div>
 <script>
 YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
+
     var a = Y.one('.a'),
         b = Y.one('.b'),
         allThumbs,
-        currThumb = 0,
+        currentThumb = 0,
         domOverlay = Y.one('#overlay'),
         domOpener = Y.one('#opener'),
         timerPic,
@@ -335,54 +396,84 @@ YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
         timerHide,
         timerSelect,
         inpEmail = Y.one('#inp-email'),
+        tape = Y.one(".pics .tape"),
+        pics = Y.one(".pics"),
+        thumbTapes, // nodelist
+        btnTapes, // nodelist                               
+
+
+
         picArr = [
             {
                 src: 'horqse.jpg',
-                note: 'Indoor, wall-mounted. Wood, plaster, paper mache. 3.5 ft.'
+                note: 'Indoor, wall-mounted. Wood, plaster, paper mache. 3.5 ft.',
+                tape: {inch: '40.8', place: 'll'} //, opacity: 0.2} 
+                // inch: the actual size, in inches, of the image area of the current image
+                // place: is the last 2 char. of class applied to the tape to place it
+                // example; "ll" gets appended to "tape-" to become class "tape-ll" 
+                // meaning, place the tape in the lower left corner of the image
+                // valid values are: "ul", "ur", "ll", "lr"
+                /*  The way to calculate property "inch" is to measure the px width of a width
+                    in the image that will be measurable on the real object, such as the width 
+                    of the horizontal stick on the horse weather vane. then
+                    (Whole image width px  /  stick width px)  *  stick width inches = value of "inch" property
+                    ( 523 / 404 * 31.5 = 40.77    (this is the actual size, in inches, of the image area of the current image)
+                */  
             },
             {
                 src: 'ducqk.jpg',
-                note: 'Hand carved solid wood, life size, antique finish.'
+                note: 'Hand carved solid wood, life size, antique finish.',
+                tape: {inch: '17', place: 'll'}
             },
             {
-                src: 'prop_scale.jpg',
-                note: 'Tempered hardboard, plaster. 4.5 ft.'
+                src: 'prop.jpg',
+                note: 'Tempered hardboard, plaster. 4.5 ft.',
+                tape: {inch: '41', place: 'll'}
             },
             {
                 src: 'moe.jpg',
-                note: '"Robotic Butterfly Enumerator". Salvaged parts sculpture. 15 x 24 in.'
+                note: '"Robotic Butterfly Enumerator". Salvaged parts sculpture. 15 x 24 in.',
+                tape: {inch: '23', place: 'll'}
             },
             {
                 src: 'iriqs.jpg',
-                note: 'Watercolor on gessoed Masonite. 22 x 48 in.'
+                note: 'Watercolor on gessoed Masonite. 22 x 48 in.',
+                tape: {inch: '54.9', place: 'lr'}
             },
             {
                 src: 'treqx.jpg',
-                note: 'T-rex fossil sculpture. 40 x 17 in.'
+                note: 'T-rex fossil sculpture. 40 x 17 in.',
+                tape: {inch: '42.9', place: 'll'}
             },
             {
                 src: 'cloqck.jpg',
-                note: 'Clock faces as art pieces. Classic to modern.'
+                note: 'Clock faces as art pieces. Classic to modern.',
+                tape: {inch: '14.1', place: 'll'}
             },
             {
                 src: 'fisqh.jpg',
-                note: 'Wire and sheet metal. Hanging mobile. 4 ft.'
+                note: 'Wire and sheet metal. Hanging mobile. 4 ft.',
+                tape: {inch: '45.5', place: 'll'}
             },
             {
                 src: 'letqter_a.jpg',
-                note: 'Theme and variations in various media. 2.5 in. blocks'
+                note: 'Theme and variations in various media. 2.5 in. blocks',
+                tape: {inch: '19.4', place: 'll'}
             },
             {
                 src: 'letqter_g.jpg',
-                note: 'Topic-related image clippings on tempered hardboard. 19 x 31 in.'
+                note: 'Topic-related image clippings on tempered hardboard. 19 x 31 in.',
+                tape: {inch: '49.4', place: 'lr'}
             },
             {
                 src: 'mooqse.jpg',
-                note: 'Paper Mache. (No animals were harmed). 4 ft. wide'
+                note: 'Paper Mache. (No animals were harmed). 4 ft. wide',
+                tape: {inch: '53.3', place: 'll'}
             },
             {
                 src: 'danqce.jpg',
-                note: 'Dance movement frames. Painted wire. Figures ~4 in. tall.'
+                note: 'Dance movement frames. Painted wire. Figures ~4 in. tall.',
+                tape: {inch: '38.9', place: 'll'}
             }
         ],
 
@@ -403,6 +494,7 @@ YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
             domOverlay.addClass('faded');
             Y.one('.note').setHTML(picArr[allThumbs.indexOf(node)].note);
             setNavArrowState();
+            tape.removeClass("tape-show");
         },
         
         resizeWin = function() {
@@ -537,14 +629,51 @@ YUI().use('node', 'overlay', 'node-event-delegate', 'event-tap', function (Y) {
 
     /////////////// create/append thumbs //////////////////
     for (var i = 0; i < picArr.length; i++) {
-        Y.one('.thumbs').append('<img class="thumb" src="images/' + picArr[i].src + '"><div class="thumb-notes">' + picArr[i].note + '</div>');        
+        Y.one('.thumbs').append('<div class="thumb-shell"><img class="thumb" src="images/' + picArr[i].src + '"><img class="tape" src="images/tape.png"></div><div class="thumb-notes">' + picArr[i].note + '<img class="btn-tape" src="images/tape_body.png"></div>');        
     }; 
 
     allThumbs = Y.all('.thumb');
     selectTarget(allThumbs.item(0));
-    
+
+    thumbTapes = Y.all(".thumbs .tape");
+    btnTapes = Y.all(".thumbs .btn-tape"); 
+
     Y.one(window).on('resize', resizeWin);    
     resizeWin();
+    
+    
+    placeTapeComb = function(e) {
+        var picWidth,
+            hideTimer,
+            actualSizeOfTape = 16.74; // the actual size, in inches, of the width of the image area of the tape.png
+
+        if(e.currentTarget.ancestor(".pics") === null) { ////////// mobile
+            currentThumb = btnTapes.indexOf(e.currentTarget);
+            picWidth = parseInt(Y.one(".thumbs img").getStyle("width"));
+            tape = thumbTapes.item(currentThumb);
+            hideTimer = setTimeout(function(){
+                tape.removeClass("tape-show");
+            }, 3000);
+        } else {     /////////////// desktop
+            picWidth = parseInt(pics.getStyle("width"));
+            // tape is initialized as .pics .tape
+        }
+        
+                    
+        if(tape.hasClass("tape-show")){
+            tape.removeClass("tape-show");
+        } else {
+            tape.removeClass("tape-ul");
+            tape.removeClass("tape-ur");
+            tape.removeClass("tape-ll");
+            tape.removeClass("tape-lr");
+            tape.addClass("tape-" + picArr[currentThumb].tape.place);
+            tape.setStyle("width", (actualSizeOfTape / picArr[currentThumb].tape.inch) * picWidth  + "px");
+            tape.addClass("tape-show");        
+        }       
+    };
+    
+    Y.on("click", placeTapeComb, ".btn-tape");      
 });
 </script>
 </body>
